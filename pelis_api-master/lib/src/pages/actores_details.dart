@@ -54,13 +54,11 @@ class ActoresDetails extends StatelessWidget {
 
   Widget _descripcion(Actor actor) {
     final actoresProvider = new ActoresProvider();
-    
-    Future<List<Actor>> text = actoresProvider.getBiography(actor.id);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
       child: Text(
-        text.toString(),
+        actoresProvider.getBiography(actor.id).toString(),
         textAlign: TextAlign.justify,
         style: TextStyle(color: Colors.black,),
       ),

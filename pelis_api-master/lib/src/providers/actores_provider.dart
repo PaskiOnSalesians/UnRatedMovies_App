@@ -83,15 +83,16 @@ class ActoresProvider {
     return cast.actores;
   }
 
-  Future<List<Actor>> getBiography(int personid) async{
-    final url = Uri.https(_url, '3/person/{$personid}', {'api_key': _apikey, 'language': _language});
+  Future<String> getBiography(int personid) async{
+    final url = Uri.https(_url, '3/person/$personid', {'api_key': _apikey, 'language': _language});
 
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
-    final cast = new Cast.fromJsonList(decodedData['biography']);
+    //final cast = new Cast.fromJsonList(decodedData['biography']);
 
-    return cast.actores;
+    //return cast.actores;
+    return decodedData;
   }
 
   Future<List<Actor>> buscarPelicula(String query) async {
