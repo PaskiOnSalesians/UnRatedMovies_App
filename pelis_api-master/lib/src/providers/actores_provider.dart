@@ -34,11 +34,6 @@ class ActoresProvider {
     return actores.actores;
   }
 
-  Future<List<Actor>> getEnCines() async {
-    final url = Uri.https(_url, '3/movie/now_playing', {'api_key': _apikey, 'language': _language}); // Pelicula
-    return await _procesarRespuesta(url);
-  }
-
   Future<List<Actor>> getActorPopulares() async {
     if (_cargando) return [];
 
@@ -77,13 +72,24 @@ class ActoresProvider {
     return cast.actores;
   }
 
-  Future<List<Actor>> getCast(String peliId) async {
-    final url = Uri.https(_url, '3/movie/$peliId/credits', {'api_key': _apikey, 'language': _language});  // pelicula
+  Future<List<Actor>> getKnownMovies(int personid) async {
+    final url = Uri.https(_url, '3/person/$personid/movie_credits', {'api_key': _apikey, 'language': _language});  // pelicula
     
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
     final cast = new Cast.fromJsonList(decodedData['cast']);
+
+    return cast.actores;
+  }
+
+  Future<List<Actor>> getBiography(int personid) async{
+    final url = Uri.https(_url, '3/person/{$personid}', {'api_key': _apikey, 'language': _language});
+
+    final resp = await http.get(url);
+    final decodedData = json.decode(resp.body);
+
+    final cast = new Cast.fromJsonList(decodedData['biography']);
 
     return cast.actores;
   }
