@@ -34,18 +34,13 @@ class ActoresProvider {
     return actores.actores;
   }
 
-  Future<List<Actor>> getEnCines() async {
-    final url = Uri.https(_url, '3/movie/now_playing', {'api_key': _apikey, 'language': _language}); // Pelicula
-    return await _procesarRespuesta(url);
-  }
-
   Future<List<Actor>> getActorPopulares() async {
     if (_cargando) return [];
 
     _cargando = true;
     _popularesPage++;
 
-    final url = Uri.https(_url, '3/person/popular', {'api_key': _apikey, 'language': _language, 'page': _popularesPage.toString()});  // Pelicula
+    final url = Uri.https(_url, '3/person/popular', {'api_key': _apikey, 'language': _language, 'page': _popularesPage.toString()}); 
     final resp = await _procesarRespuesta(url);
 
     _populares.addAll(resp);
@@ -53,17 +48,6 @@ class ActoresProvider {
 
     _cargando = false;
     return resp;
-  }
-
-  Future<List<Actor>> getPopulares() async{
-    final url = Uri.https(_url, '3/person/popular', {'api_key': _apikey, 'language': _language});
-
-    final resp = await http.get(url);
-    final decodedData = json.decode(resp.body);
-
-    final cast = new Cast.fromJsonList(decodedData['cast']);
-
-    return cast.actores;
   }
 
   Future<List<Actor>> getFoto() async{
@@ -77,8 +61,9 @@ class ActoresProvider {
     return cast.actores;
   }
 
-  Future<List<Actor>> getCast(String peliId) async {
-    final url = Uri.https(_url, '3/movie/$peliId/credits', {'api_key': _apikey, 'language': _language});  // pelicula
+/*
+  Future<List<Actor>> getKnownMovies(int personid) async {
+    final url = Uri.https(_url, '3/person/$personid/movie_credits', {'api_key': _apikey, 'language': _language});  // pelicula
     
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
@@ -87,9 +72,22 @@ class ActoresProvider {
 
     return cast.actores;
   }
+*/
 
-  Future<List<Actor>> buscarPelicula(String query) async {
-    final url = Uri.https(_url, '3/search/movie', {'api_key': _apikey, 'language': _language, 'query': query});  // Pelicula
+  Future<String> getBiography(int personid) async{
+    final url = Uri.https(_url, '3/person/$personid', {'api_key': _apikey, 'language': _language});
+
+    final resp = await http.get(url);
+    final decodedData = json.decode(resp.body);
+
+    //final cast = new Cast.fromJsonList(decodedData['biography']);
+
+    //return cast.actores;
+    return decodedData['biography'];
+  }
+
+  Future<List<Actor>> buscarActor(String query) async {
+    final url = Uri.https(_url, '3/search/person', {'api_key': _apikey, 'language': _language, 'query': query});  // Pelicula
     
     return await _procesarRespuesta(url);
   }

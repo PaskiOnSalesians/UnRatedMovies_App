@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:scooby_app/src/models/actores_model.dart';
-import 'package:scooby_app/src/models/pelicula_model.dart';
+//import 'package:scooby_app/src/models/pelicula_model.dart';
 
 import 'package:scooby_app/src/providers/actores_provider.dart';
 
@@ -9,7 +9,7 @@ class ActoresDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Actor actor = ModalRoute.of(context).settings.arguments;
-    final Pelicula pelicula = ModalRoute.of(context).settings.arguments;
+    //final Pelicula pelicula = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
         body: CustomScrollView(
@@ -19,9 +19,9 @@ class ActoresDetails extends StatelessWidget {
           delegate: SliverChildListDelegate([
             SizedBox(height: 10.0),
             //_posterTitulo(context, actor),
-            //_descripcion(actor),
-            _crearMovies(pelicula),
-            _knownForMovies(pelicula),
+            _descripcion(actor),
+            //_crearMovies(actor),
+            //_knownForMovies(actor),
           ]),
         )
       ],
@@ -52,11 +52,36 @@ class ActoresDetails extends StatelessWidget {
     );
   }
 
-  Widget _crearMovies(Pelicula pelicula) {
+  Widget _descripcion(Actor actor) {
+    final actoresProvider = new ActoresProvider();
+    return FutureBuilder(
+      future: actoresProvider.getBiography(actor.id),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  snapshot.data,
+                  textAlign: TextAlign.justify,
+                  ),
+              ),
+            ]
+          );
+        } else {
+          return Text('No hay descripción disponible') /*Center(child: CircularProgressIndicator())*/;
+        }
+      },
+    );
+  }
+  /*
+
+  Widget _crearMovies(Actor actor) {
     final actorProvider = new ActoresProvider();
 
     return FutureBuilder(
-      future: actorProvider.getPopulares(),
+      future: actorProvider.getKnownMovies(actor.id),
       builder: (context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           return _crearPeliculasPageView(snapshot.data);
@@ -67,106 +92,21 @@ class ActoresDetails extends StatelessWidget {
     );
   }
 
-  Widget _crearPeliculasPageView(List<Pelicula> pelicula) {
+  Widget _crearPeliculasPageView(List<Actor> actor) {
     return SizedBox(
       height: 200.0,
       child: PageView.builder(
         pageSnapping: false,
         controller: PageController(viewportFraction: 0.3, initialPage: 1),
-        itemCount: pelicula.length,
-        itemBuilder: (context, i) => _knownForMovies(pelicula[i]),
+        itemCount: actor.length,
+        itemBuilder: (context, i) => _knownForMovies(actor[i]),
       ),
     );
   }
 
-  Widget _knownForMovies(Pelicula pelicula){
-    return Container(
-        child: Column(
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: FadeInImage(
-            image: NetworkImage(pelicula.getPosterImg()),
-            placeholder: AssetImage('assets/img/no-image.jpg'),
-            height: 150.0,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Text(
-          pelicula.title,
-          overflow: TextOverflow.ellipsis,
-        )
-      ],
-    ));
-  }
-/*
-  Widget _posterTitulo(BuildContext context, Actor actor) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        children: <Widget>[
-          Hero(
-            tag: actor.id,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image(
-                image: NetworkImage(actor.profilePath),
-                height: 150.0,
-              ),
-            ),
-          ),
-          SizedBox(width: 20.0),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(actor.name, style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _descripcion(Actor actor) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-      child: Text(
-        'Test',
-        textAlign: TextAlign.justify,
-      ),
-    );
-  }
-
-  Widget _crearCasting(Actor actor) {
+  Widget _knownForMovies(Actor actor){
     final actorProvider = new ActoresProvider();
 
-    return FutureBuilder(
-      future: actorProvider.getPopulares(),
-      builder: (context, AsyncSnapshot<List> snapshot) {
-        if (snapshot.hasData) {
-          return _crearActoresPageView(snapshot.data);
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  Widget _crearActoresPageView(List<Actor> actores) {
-    return SizedBox(
-      height: 200.0,
-      child: PageView.builder(
-        pageSnapping: false,
-        controller: PageController(viewportFraction: 0.3, initialPage: 1),
-        itemCount: actores.length,
-        itemBuilder: (context, i) => _actorTarjeta(actores[i]),
-      ),
-    );
-  }
-
-  Widget _actorTarjeta(Actor actor) {
     return Container(
         child: Column(
       children: <Widget>[
@@ -180,11 +120,10 @@ class ActoresDetails extends StatelessWidget {
           ),
         ),
         Text(
-          actor.name,
+          'Test',
           overflow: TextOverflow.ellipsis,
         )
       ],
     ));
-  }
-  */
+  }*/
 }
