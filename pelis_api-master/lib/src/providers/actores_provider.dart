@@ -92,7 +92,7 @@ class ActoresProvider {
     //final cast = new Cast.fromJsonList(decodedData['biography']);
 
     //return cast.actores;
-    return decodedData;
+    return decodedData['biography'];
   }
 
   Future<List<Actor>> buscarPelicula(String query) async {

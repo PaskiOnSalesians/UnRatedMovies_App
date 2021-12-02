@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:scooby_app/src/models/actores_model.dart';
-import 'package:scooby_app/src/models/pelicula_model.dart';
+//import 'package:scooby_app/src/models/pelicula_model.dart';
 
 import 'package:scooby_app/src/providers/actores_provider.dart';
 
@@ -20,8 +20,8 @@ class ActoresDetails extends StatelessWidget {
             SizedBox(height: 10.0),
             //_posterTitulo(context, actor),
             _descripcion(actor),
-            _crearMovies(actor),
-            _knownForMovies(actor),
+            //_crearMovies(actor),
+            //_knownForMovies(actor),
           ]),
         )
       ],
@@ -55,15 +55,37 @@ class ActoresDetails extends StatelessWidget {
   Widget _descripcion(Actor actor) {
     final actoresProvider = new ActoresProvider();
 
-    return Container(
+    /*return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
       child: Text(
-        actoresProvider.getBiography(actor.id).toString(),
+        actoresProvider.getBiography(actor.id),
         textAlign: TextAlign.justify,
         style: TextStyle(color: Colors.black,),
       ),
+    );*/
+
+    return FutureBuilder(
+      future: actoresProvider.getBiography(actor.id),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  snapshot.data,
+                  textAlign: TextAlign.justify,
+                  ),
+              ),
+            ]
+          );
+        } else {
+          return Text('No hay descripción disponible') /*Center(child: CircularProgressIndicator())*/;
+        }
+      },
     );
   }
+  /*
 
   Widget _crearMovies(Actor actor) {
     final actorProvider = new ActoresProvider();
@@ -113,39 +135,5 @@ class ActoresDetails extends StatelessWidget {
         )
       ],
     ));
-  }
-/*
-  Widget _posterTitulo(BuildContext context, Actor actor) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        children: <Widget>[
-          Hero(
-            tag: actor.id,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image(
-                image: NetworkImage(actor.profilePath),
-                height: 150.0,
-              ),
-            ),
-          ),
-          SizedBox(width: 20.0),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(actor.name, style: Theme.of(context).textTheme.bodyText1, overflow: TextOverflow.ellipsis),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  
-
-  
-  */
+  }*/
 }
