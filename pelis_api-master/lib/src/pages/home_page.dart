@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:scooby_app/src/providers/actores_provider.dart';
 import 'package:scooby_app/src/providers/peliculas_provider.dart';
+
 import 'package:scooby_app/src/search/search_delegate.dart';
 
 import 'package:scooby_app/src/widgets/card_swiper_widget.dart';
